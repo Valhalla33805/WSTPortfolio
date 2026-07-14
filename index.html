@@ -64,6 +64,16 @@
             0% { transform: translate(0, 0) scale(1); opacity: 1; }
             100% { transform: translate(400px, -200px) scale(0.5); opacity: 0; }
         }
+        /* Music Player Styling */
+.music-player {
+    position: fixed; bottom: 20px; right: 20px;
+    background: rgba(30, 25, 20, 0.9);
+    border: 2px solid #d4af37;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex; align-items: center; gap: 10px;
+}
+.music-player p { color: #d4af37; font-size: 0.8rem; margin: 0; }
     </style>
 </head>
 <body>
@@ -163,5 +173,12 @@
 
     showSection('profile');
 </script>
+    <div class="music-player">
+    <p>🎵 Playing: Forest Theme</p>
+    <audio controls loop style="height: 30px;">
+        <source src="fbgmusic.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+</div>
 </body>
 </html>

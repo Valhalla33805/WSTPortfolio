@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forest Wizard Portfolio</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel&display=swap');
+
+        body {
+            margin: 0; height: 100vh;
+            background: url('pics/forestbg.jfif') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Cinzel', serif;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .journal {
+            width: 850px; height: 550px;
+            background: rgba(30, 25, 20, 0.9);
+            border: 8px ridge #4e342e;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            color: #e0d8c3;
+        }
+
+        .nav-bar { grid-column: span 2; border-bottom: 2px solid #d4af37; padding-bottom: 10px; margin-bottom: 20px; }
+        .nav-bar button { background: none; border: none; color: #d4af37; font-family: 'Cinzel'; cursor: pointer; margin-right: 20px; font-size: 1.2rem; }
+        .nav-bar button:hover { text-shadow: 0 0 10px #d4af37; }
+
+        .wizard-container { 
+            display: flex; align-items: center; justify-content: center;
+            animation: float 3s ease-in-out infinite; 
+        }
+        .wizard-container img { width: 100%; image-rendering: pixelated; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Scrollable Display Area */
+        #display-area {
+            overflow-y: auto;
+            max-height: 400px;
+            padding-right: 15px;
+        }
+        
+        /* Custom Wizard Scrollbar */
+        #display-area::-webkit-scrollbar { width: 8px; }
+        #display-area::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        #display-area::-webkit-scrollbar-thumb { background: #4e342e; border: 1px solid #d4af37; }
+
+        /* UI Styles */
+        input, textarea { width: 90%; background: rgba(0,0,0,0.3); border: 1px solid #d4af37; color: #e0d8c3; padding: 10px; margin: 5px 0 15px 0; font-family: 'Cinzel'; }
+        button.submit-btn { background: #d4af37; border: none; padding: 10px 20px; cursor: pointer; font-family: 'Cinzel'; font-weight: bold; color: #2d2319; }
+        
+        .mana-bar { width: 100%; height: 8px; background: #333; margin: 5px 0 15px 0; border: 1px solid #555; }
+        .mana-fill { height: 100%; background: #d4af37; }
+
+        @keyframes flyAway {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(400px, -200px) scale(0.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="journal">
+    <nav class="nav-bar">
+        <button onclick="showSection('profile')">PROFILE</button>
+        <button onclick="showSection('quests')">QUESTS</button>
+        <button onclick="showSection('hobbies')">HOBBIES</button>
+        <button onclick="showSection('contact')">CONTACT</button>
+    </nav>
+
+    <div class="wizard-container">
+        <img src="pics/mc.png" alt="Forest Wizard">
+    </div>
+
+    <div id="display-area"></div>
+</div>
+
+<script>
+    const data = {
+        profile: `
+            <h2>ALJOMAR O. GONZALES</h2>
+            <p>Age: 21 | Born: Nov 17, 2004</p>
+            <p>Location: Maasin City, Southern Leyte, PH</p>
+            <hr>
+            <p><em>"Yesterday is history, tomorrow is a mystery, but today is a gift. That is why it is called the present."</em></p>
+            <h3>ACADEMIC JOURNEY</h3>
+            <p><strong>Cebu Institute of Technology - University (2023-2025)</strong><br>CHED Center of Excellence in IT Education.</p>
+            <p><strong>College of Maasin (2024-2027)</strong><br>Private institution in Tunga-Tunga, Maasin, Southern Leyte.</p>
+        `,
+        quests: `
+            <h2>COMPLETED QUESTS</h2>
+            ${[
+                { title: "Dairy Box Website", desc: "Interactive storefront for Pinoy MPC.", url: "https://pinoycoop.github.io/DairyBox/" },
+                { title: "TCM Queuing System", desc: "Cloud-based queue management for institutions.", url: "https://valhalla33805.github.io/FinanceTest/" },
+                { title: "3D Local Visual Map", desc: "Hardware-accelerated spatial rendering.", url: "https://valhalla33805.github.io/PugalingFL/" },
+                { title: "SmashHub: Arena Manager", desc: "Badminton court queueing and analytics hub.", url: "https://valhalla33805.github.io/Queueing/" }
+            ].map(q => `
+                <div style="background:rgba(0,0,0,0.2); padding:15px; margin-bottom:15px; border-left:4px solid #d4af37;">
+                    <h3 style="margin:0; color:#d4af37;">${q.title}</h3>
+                    <p style="font-size:0.9rem; margin:5px 0;">${q.desc}</p>
+                    <a href="${q.url}" target="_blank" style="color:#a89154; text-decoration:none; font-weight:bold;">>> View Project</a>
+                </div>
+            `).join('')}
+        `,
+        hobbies: `
+            <h2>GALLERY OF CONQUESTS</h2>
+            <p>Click any accolade to inspect the scroll.</p>
+            <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                ${[
+                    "pics/prisaa.jpg", "pics/award.png", "pics/award2.png", "pics/award3.png",
+                    "pics/award4.png", "pics/award5.png", "pics/cba.jpg", "pics/cesafi.png",
+                    "pics/cesafi2.png", "pics/citu.png", "pics/citu2.png", "pics/citu3.png",
+                    "pics/mixed.jpg", "pics/award7.png"
+                ].map(img => `
+                    <a href="${img}" target="_blank">
+                        <img src="${img}" style="width:100%; height:80px; object-fit:cover; border:1px solid #d4af37; cursor:pointer;" title="Click to view full size">
+                    </a>
+                `).join('')}
+            </div>
+            
+            <h3 style="margin-top:20px;">STATISTICS</h3>
+            <p>🏸 Court Mobility & Agility</p>
+            <div class="mana-bar"><div class="mana-fill" style="width: 85%;"></div></div>
+            <p>🏆 Tournament Victories</p>
+            <div class="mana-bar"><div class="mana-fill" style="width: 95%;"></div></div>
+        `,
+        contact: `
+            <div id="contact-content">
+                <h2>[ARCANE COMMUNIQUÉ]</h2>
+                <form id="ravenForm" onsubmit="sendRaven(event)">
+                    <label>Seeker Identity (Name):</label>
+                    <input type="text" name="name" required>
+                    <label>Arcane Address (Email):</label>
+                    <input type="email" name="email" required>
+                    <textarea name="message" placeholder="Type your scroll here..." rows="3" required></textarea>
+                    <button type="submit" class="submit-btn">SEND RAVEN TO THE WIZARD</button>
+                </form>
+            </div>
+        `
+    };
+
+    function showSection(section) {
+        document.getElementById('display-area').innerHTML = data[section];
+    }
+    
+    function sendRaven(event) {
+        event.preventDefault();
+        document.getElementById('contact-content').innerHTML = `
+            <div style="text-align:center; padding-top:50px;">
+                <div style="font-size:50px; animation: flyAway 2s forwards;">🐦‍⬛✉️</div>
+                <h2 style="color:#d4af37;">RAVEN DISPATCHED!</h2>
+            </div>
+        `;
+    }
+
+    showSection('profile');
+</script>
+</body>
+</html>

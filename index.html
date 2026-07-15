@@ -9,7 +9,7 @@
         body {
             margin: 0; height: 100vh;
             /* Keep the original background for the journal layer */
-            background: url('pics/forestbg.jfif') no-repeat center center fixed;
+            background: url('forestbg.jfif') no-repeat center center fixed;
             background-size: cover;
             font-family: 'Cinzel', serif;
             display: flex; justify-content: center; align-items: center;
@@ -175,19 +175,25 @@
 <!-- --- 2. THE JOURNAL (Existing, hidden initially via z-index/opacity) --- -->
 <div class="journal">
     <nav class="nav-bar">
+        <button onclick="showSection('aboutme')">ABOUT ME</button>
         <button onclick="showSection('profile')">PROFILE</button>
         <button onclick="showSection('quests')">QUESTS</button>
         <button onclick="showSection('hobbies')">HOBBIES</button>
         <button onclick="showSection('contact')">CONTACT</button>
     </nav>
 
-    <div class="wizard-container">
-        <img src="pics/mc.png" alt="Forest Wizard">
-    </div>
+    <div class="wizard-container" onclick="changeWizard()">
+    <img id="wizard-img" src="pics/mc.png" alt="Wizard" style="width:100%; image-rendering:pixelated; cursor:pointer;">
+</div>
 
     <div id="display-area">
         <!-- Content injected here by JS -->
     </div>
+    <div id="familiar" onclick="greetWizard()">🦉</div>
+
+    <footer style="grid-column: span 2; text-align: center; border-top: 1px solid #d4af37; padding-top: 10px; color: #d4af37; font-size: 0.8rem; font-style: italic;">
+        &copy; 2026 The Arcane Archive | Aljomar O. Gonzales
+    </footer>
 </div>
 
 <!-- Music Player -->
@@ -200,6 +206,12 @@
 
 <script>
     const data = {
+        aboutme: `
+        <h2>ABOUT ME</h2>
+            <p class="text-base sm:text-lg text-gray-400 font-light leading-relaxed max-w-2xl font-sans">
+                    I am Aljomar O. Gonzales, the programmer behind the <strong class="text-white font-medium">ALGORITHM</strong> matrix. As an IT Specialist and Frontend Engineer, I architect high-performance web solutions focused on responsive UI/UX, scalable client-side logic, and seamless database integration. I specialize in building data-driven applications that bridge complex backend structures with fluid, hardware-accelerated user interfaces.
+                </p>
+        `,
         profile: `
             <h2>ALJOMAR O. GONZALES</h2>
             <p>Age: 21 | Born: Nov 17, 2004</p>
@@ -213,10 +225,10 @@
         quests: `
             <h2>COMPLETED QUESTS</h2>
             ${[
-                { title: "Dairy Box Website", desc: "Interactive storefront for Pinoy MPC.", url: "https://pinoycoop.github.io/DairyBox/" },
-                { title: "TCM Queuing System", desc: "Cloud-based queue management for institutions.", url: "https://valhalla33805.github.io/FinanceTest/" },
-                { title: "3D Local Visual Map", desc: "Hardware-accelerated spatial rendering.", url: "https://valhalla33805.github.io/PugalingFL/" },
-                { title: "SmashHub: Arena Manager", desc: "Badminton court queueing and analytics hub.", url: "https://valhalla33805.github.io/Queueing/" }
+                { title: "Dairy Box Website", desc: "Interactive storefront for Pinoy MPC", url: "https://pinoycoop.github.io/DairyBox/" },
+                { title: "TCM Queuing System", desc: "Cloud-based queue management for institutions", url: "https://valhalla33805.github.io/FinanceTest/" },
+                { title: "3D Local Visual Map", desc: "Hardware-accelerated spatial rendering", url: "https://valhalla33805.github.io/PugalingFL/" },
+                { title: "SmashHub: Arena Manager", desc: "Badminton court queueing and analytics hub", url: "https://valhalla33805.github.io/Queueing/" }
             ].map(q => `
                 <div style="background:rgba(0,0,0,0.2); padding:15px; margin-bottom:15px; border-left:4px solid #d4af37;">
                     <h3 style="margin:0; color:#d4af37;">${q.title}</h3>
@@ -254,22 +266,22 @@
     };
    const albumData = {
     'TOURNAMENTS': [
-        { src: 'pics/award.png', desc: 'Maasin City Open Tournament 2023.' },
-        { src: 'pics/award2.png', desc: 'Ormoc City Protech Tournament.' },
-        { src: 'pics/award3.png', desc: 'Hinunangan Tournament 2026.' },
-        { src: 'pics/award4.png', desc: 'Hilongos Open Tournament 2025.' },
-        { src: 'pics/award5.png', desc: 'Sogod Open Tournament 2024.' },
-        { src: 'pics/mixed.jpg', desc: 'Maasin City Open Tournament 2024.' },
-        { src: 'pics/cba.jpg', desc: 'Cebu Badminton Academy Open Tournament 2026.' }
+        { src: 'pics/award.png', desc: 'Maasin City Open Tournament 2023' },
+        { src: 'pics/award2.png', desc: 'Ormoc City Protech Tournament' },
+        { src: 'pics/award3.png', desc: 'Hinunangan Tournament 2026' },
+        { src: 'pics/award4.png', desc: 'Hilongos Open Tournament 2025' },
+        { src: 'pics/award5.png', desc: 'Sogod Open Tournament 2024' },
+        { src: 'pics/mixed.jpg', desc: 'Maasin City Open Tournament 2024' },
+        { src: 'pics/cba.jpg', desc: 'Cebu Badminton Academy Open Tournament 2026' }
     ],
     'CESAFI': [
-        { src: 'pics/cesafi.png', desc: 'The heat of the CESAFI competition.' },
-        { src: 'pics/cesafi2.png', desc: 'CESAFI Competition.' }
+        { src: 'pics/cesafi.png', desc: 'The heat of the CESAFI competition' },
+        { src: 'pics/cesafi2.png', desc: 'CESAFI Competition' }
     ],
     'CITU': [
-        { src: 'pics/citu.png', desc: 'CIT-U Badminton Team CESAFI 2024.' },
-        { src: 'pics/citu2.png', desc: 'Team spirit at the CIT-U grounds.' },
-        { src: 'pics/citu3.png', desc: 'CIT-U Badminton Team CESAFI 2025.' }
+        { src: 'pics/citu.png', desc: 'CIT-U Badminton Team CESAFI 2024' },
+        { src: 'pics/citu2.png', desc: 'Team spirit at the CIT-U grounds' },
+        { src: 'pics/citu3.png', desc: 'CIT-U Badminton Team CESAFI 2025' }
     ],
    'PRISAA': [
         { src: 'pics/prisaa.jpg', desc: 'PRISAA CLUSTER MEET 2026' }
@@ -384,6 +396,19 @@ function openAlbum(category) {
         audio.muted = true;
         btn.innerHTML = '🔇';
     }
+}
+function greetWizard() { alert("🦉: The Wizard is currently brewing coffee. Try back later!"); }
+let wizardState = 0;
+function changeWizard() {
+    const img = document.getElementById('wizard-img');
+    wizardState = (wizardState + 1) % 2; // Toggles between 0 and 1
+    
+    // Change to your secondary image filename here
+    img.src = wizardState === 0 ? 'pics/mc.png' : 'pics/me.png'; 
+    
+    // Optional: Add a small "sparkle" effect when changing
+    img.style.filter = 'drop-shadow(0 0 10px #d4af37)';
+    setTimeout(() => img.style.filter = 'none', 300);
 }
 
     // Do NOT call showSection('profile') here anymore.

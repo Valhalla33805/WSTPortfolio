@@ -8,12 +8,69 @@
 
         body {
             margin: 0; height: 100vh;
-            background: url('pics/forestbg.jfif') no-repeat center center fixed;
+            /* Keep the original background for the journal layer */
+            background: url('forestbg.jfif') no-repeat center center fixed;
             background-size: cover;
             font-family: 'Cinzel', serif;
             display: flex; justify-content: center; align-items: center;
+            overflow: hidden; /* Prevent scrollbars on landing */
         }
 
+        /* --- NEW LANDING SCREEN STYLES --- */
+        #landing-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            /* Reference your new image here */
+            background: url('pics/cave.jfif') no-repeat center center;
+            background-size: cover;
+            display: flex; flex-direction: column;
+            justify-content: flex-end; /* Align button to bottom */
+            align-items: center;
+            padding-bottom: 100px; /* Spacing from bottom */
+            z-index: 2000; /* On top of everything */
+            transition: opacity 1.5s ease-in-out, visibility 1.5s;
+        }
+
+       #landing-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: url('pics/cave.jfif') no-repeat center center;
+    background-size: cover;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; /* Centers vertically */
+    align-items: center;      /* Centers horizontally */
+    z-index: 2000;
+    transition: opacity 1.5s ease-in-out, visibility 1.5s;
+}
+
+.enter-btn {
+    background: rgba(30, 25, 20, 0.9);
+    border: 2px solid #d4af37;
+    color: #d4af37;
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    padding: 20px 50px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    text-shadow: 0 0 5px #d4af37;
+}
+
+.enter-btn:hover {
+    background: #d4af37;
+    color: #2d2319;
+    transform: scale(1.1); /* Slightly enlarges on hover */
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
+}
+
+        .hide-landing {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none;
+        }
+
+        /* --- ORIGINAL JOURNAL STYLES --- */
         .journal {
             width: 850px; height: 550px;
             background: rgba(30, 25, 20, 0.9);
@@ -23,6 +80,7 @@
             grid-template-columns: 250px 1fr;
             gap: 30px;
             color: #e0d8c3;
+            z-index: 1; /* Behind landing */
         }
 
         .nav-bar { grid-column: span 2; border-bottom: 2px solid #d4af37; padding-bottom: 10px; margin-bottom: 20px; }
@@ -41,19 +99,15 @@
             100% { transform: translateY(0px); }
         }
 
-        /* Scrollable Display Area */
         #display-area {
             overflow-y: auto;
             max-height: 400px;
             padding-right: 15px;
         }
-        
-        /* Custom Wizard Scrollbar */
         #display-area::-webkit-scrollbar { width: 8px; }
         #display-area::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
         #display-area::-webkit-scrollbar-thumb { background: #4e342e; border: 1px solid #d4af37; }
 
-        /* UI Styles */
         input, textarea { width: 90%; background: rgba(0,0,0,0.3); border: 1px solid #d4af37; color: #e0d8c3; padding: 10px; margin: 5px 0 15px 0; font-family: 'Cinzel'; }
         button.submit-btn { background: #d4af37; border: none; padding: 10px 20px; cursor: pointer; font-family: 'Cinzel'; font-weight: bold; color: #2d2319; }
         
@@ -64,20 +118,61 @@
             0% { transform: translate(0, 0) scale(1); opacity: 1; }
             100% { transform: translate(400px, -200px) scale(0.5); opacity: 0; }
         }
-        /* Music Player Styling */
-.music-player {
-    position: fixed; bottom: 20px; right: 20px;
-    background: rgba(30, 25, 20, 0.9);
-    border: 2px solid #d4af37;
-    padding: 10px;
-    border-radius: 5px;
-    display: flex; align-items: center; gap: 10px;
+
+        /* Music Player */
+        .music-player {
+            position: fixed; bottom: 20px; right: 20px;
+            background: rgba(30, 25, 20, 0.9);
+            border: 2px solid #d4af37;
+            padding: 5px 10px; border-radius: 5px; z-index: 500;
+        }
+        /* Falling Leaves Animation */
+/* Falling Leaves Animation */
+.leaf {
+    position: fixed; /* Fixed to the viewport */
+    top: -30px;      /* Start above the visible area */
+    width: 20px; 
+    height: 20px;
+    background-color: #d4af37;
+    opacity: 0.6;
+    border-radius: 0 50% 0 50%;
+    animation: fall linear infinite;
+    z-index: 3000;   /* Ensure leaves fall over the landing screen */
 }
-.music-player p { color: #d4af37; font-size: 0.8rem; margin: 0; }
+
+@keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(105vh) rotate(360deg); } /* Fall to 105% of screen height */
+}
+#mute-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(30, 25, 20, 0.8);
+    border: 2px solid #d4af37;
+    color: #d4af37;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    z-index: 3000;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+#mute-btn:hover { background: #d4af37; color: #2d2319; }
     </style>
 </head>
 <body>
+<button id="mute-btn" onclick="toggleMute()">🔊</button>
+<div id="landing-screen">
+    <h1 style="color:#d4af37; font-size:4rem; text-shadow: 0 0 20px #000; margin-bottom: 20px;">
+        
+    </h1>
+<div></div>
+    <button class="enter-btn" onclick="enterForest()">Enter Forest</button>
+</div>
 
+<!-- --- 2. THE JOURNAL (Existing, hidden initially via z-index/opacity) --- -->
 <div class="journal">
     <nav class="nav-bar">
         <button onclick="showSection('profile')">PROFILE</button>
@@ -87,10 +182,20 @@
     </nav>
 
     <div class="wizard-container">
-        <img src="pics/mc.png" alt="Forest Wizard">
+        <img src="mc.png" alt="Forest Wizard">
     </div>
 
-    <div id="display-area"></div>
+    <div id="display-area">
+        <!-- Content injected here by JS -->
+    </div>
+</div>
+
+<!-- Music Player -->
+<div class="music-player">
+    <audio id="bg-music" loop>
+        <source src="pics/fbgmusic.mp3" type="audio/mpeg">
+    </audio>
+    <p style="color:#d4af37; font-size: 0.7rem; margin:0;">Ambience: Terraria Forest</p>
 </div>
 
 <script>
@@ -102,8 +207,8 @@
             <hr>
             <p><em>"Yesterday is history, tomorrow is a mystery, but today is a gift. That is why it is called the present."</em></p>
             <h3>ACADEMIC JOURNEY</h3>
-            <p><strong>Cebu Institute of Technology - University (2023-2025)</strong><br>CHED Center of Excellence in IT Education.</p>
-            <p><strong>College of Maasin (2024-2027)</strong><br>Private institution in Tunga-Tunga, Maasin, Southern Leyte.</p>
+            <p><strong>Cebu Institute of Technology - University (2023-2024|2024-2025)</strong><br>CHED Center of Excellence in IT Education.</p>
+            <p><strong>College of Maasin (2024-2025|2025-2026|2026-2027)</strong><br>Private institution in Tunga-Tunga, Maasin, Southern Leyte.</p>
         `,
         quests: `
             <h2>COMPLETED QUESTS</h2>
@@ -122,63 +227,167 @@
         `,
         hobbies: `
             <h2>GALLERY OF CONQUESTS</h2>
-            <p>Click any accolade to inspect the scroll.</p>
-            <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-                ${[
-                    "pics/prisaa.jpg", "pics/award.png", "pics/award2.png", "pics/award3.png",
-                    "pics/award4.png", "pics/award5.png", "pics/cba.jpg", "pics/cesafi.png",
-                    "pics/cesafi2.png", "pics/citu.png", "pics/citu2.png", "pics/citu3.png",
-                    "pics/mixed.jpg", "pics/award7.png"
-                ].map(img => `
-                    <a href="${img}" target="_blank">
-                        <img src="${img}" style="width:100%; height:80px; object-fit:cover; border:1px solid #d4af37; cursor:pointer;" title="Click to view full size">
-                    </a>
-                `).join('')}
+            <p>Select an archive to view the spoils of war.</p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
+                <button onclick="openAlbum('TOURNAMENTS')" class="submit-btn">TOURNAMENTS</button>
+                <button onclick="openAlbum('CESAFI')" class="submit-btn">CESAFI</button>
+                <button onclick="openAlbum('CITU')" class="submit-btn">CIT-U</button>
+                <button onclick="openAlbum('PRISAA')" class="submit-btn">PRISAA</button>
             </div>
-            
-            <h3 style="margin-top:20px;">STATISTICS</h3>
-            <p>🏸 Court Mobility & Agility</p>
-            <div class="mana-bar"><div class="mana-fill" style="width: 85%;"></div></div>
-            <p>🏆 Tournament Victories</p>
-            <div class="mana-bar"><div class="mana-fill" style="width: 95%;"></div></div>
+            <div id="album-display" style="border-top:1px solid #d4af37; padding-top:20px;">
+                <p>Click a category above to reveal your achievements.</p>
+            </div>
         `,
         contact: `
             <div id="contact-content">
                 <h2>[ARCANE COMMUNIQUÉ]</h2>
-                <form id="ravenForm" onsubmit="sendRaven(event)">
-                    <label>Seeker Identity (Name):</label>
-                    <input type="text" name="name" required>
-                    <label>Arcane Address (Email):</label>
-                    <input type="email" name="email" required>
-                    <textarea name="message" placeholder="Type your scroll here..." rows="3" required></textarea>
-                    <button type="submit" class="submit-btn">SEND RAVEN TO THE WIZARD</button>
-                </form>
+                <form id="ravenForm" action="https://formspree.io/f/xbdvrzew" method="POST" onsubmit="sendRaven(event)">
+    <label>Seeker Identity (Name):</label>
+    <input type="text" name="name" required>
+    <label>Arcane Address (Email):</label>
+    <input type="email" name="email" required>
+    <textarea name="message" placeholder="Type your scroll here..." rows="3" required></textarea>
+    <button type="submit" class="submit-btn">SEND RAVEN TO THE WIZARD</button>
+</form>
             </div>
         `
     };
+   const albumData = {
+    'TOURNAMENTS': [
+        { src: 'pics/award.png', desc: 'Maasin City Open Tournament 2023.' },
+        { src: 'pics/award2.png', desc: 'Ormoc City Protech Tournament.' },
+        { src: 'pics/award3.png', desc: 'Hinunangan Tournament 2026.' },
+        { src: 'pics/award4.png', desc: 'Hilongos Open Tournament 2025.' },
+        { src: 'pics/award5.png', desc: 'Sogod Open Tournament 2024.' },
+        { src: 'pics/mixed.jpg', desc: 'Maasin City Open Tournament 2024.' },
+        { src: 'pics/cba.jpg', desc: 'Cebu Badminton Academy Open Tournament 2026.' }
+    ],
+    'CESAFI': [
+        { src: 'pics/cesafi.png', desc: 'The heat of the CESAFI competition.' },
+        { src: 'pics/cesafi2.png', desc: 'CESAFI Competition.' }
+    ],
+    'CITU': [
+        { src: 'pics/citu.png', desc: 'CIT-U Badminton Team CESAFI 2024.' },
+        { src: 'pics/citu2.png', desc: 'Team spirit at the CIT-U grounds.' },
+        { src: 'pics/citu3.png', desc: 'CIT-U Badminton Team CESAFI 2025.' }
+    ],
+   'PRISAA': [
+        { src: 'pics/prisaa.jpg', desc: 'PRISAA CLUSTER MEET 2026' }
+    ]
+};
+
+function openAlbum(category) {
+    const display = document.getElementById('album-display');
+    const photos = albumData[category] || [];
+    
+    display.innerHTML = `<h3>${category} ARCHIVE</h3>` + photos.map(p => `
+        <div style="margin-bottom:20px; background:rgba(0,0,0,0.4); padding:10px; border-left:3px solid #d4af37;">
+            <a href="${p.src}" target="_blank">
+                <img src="${p.src}" style="width:100%; max-height:200px; object-fit:contain; cursor:pointer;">
+            </a>
+            <p style="font-size:0.9rem; margin-top:10px; color:#e0d8c3;">${p.desc}</p>
+        </div>
+    `).join('');
+}
+
+function openAlbum(category) {
+    const display = document.getElementById('album-display');
+    const photos = albumData[category] || [];
+    
+    display.innerHTML = `<h3>${category}</h3>` + photos.map(p => `
+        <div style="margin-bottom:15px; background:rgba(0,0,0,0.3); padding:10px;">
+            <img src="${p.src}" style="width:100%; max-height:200px; object-fit:contain;">
+            <p style="font-size:0.8rem; font-style:italic;">${p.desc}</p>
+        </div>
+    `).join('');
+}
+
+    // --- NEW FUNCTION TO HANDLE ENTRY ---
+    function enterForest() {
+        // 1. Hide Landing Screen
+        const landing = document.getElementById('landing-screen');
+        landing.classList.add('hide-landing');
+
+        // 2. Show Profile by default
+        showSection('profile');
+
+        // 3. Start Music (Browsers require user interaction first)
+        const audio = document.getElementById('bg-music');
+        audio.play().catch(e => console.log("Autoplay prevented by browser."));
+        
+        // 4. Re-enable scrolling on body
+        document.body.style.overflow = 'auto';
+    }
 
     function showSection(section) {
         document.getElementById('display-area').innerHTML = data[section];
     }
     
-    function sendRaven(event) {
-        event.preventDefault();
+    async function sendRaven(event) {
+    event.preventDefault(); // Prevents the page from reloading
+    
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    // Show a "loading" state
+    document.getElementById('contact-content').innerHTML = `
+        <h2 style="color:#d4af37;">DISPATCHING RAVEN...</h2>
+    `;
+
+    try {
+        const response = await fetch("https://formspree.io/f/xbdvrzew", {
+            method: "POST",
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+            // Success state with "Go Back" button
+            document.getElementById('contact-content').innerHTML = `
+                <div style="text-align:center; padding-top:50px;">
+                    <div style="font-size:50px; animation: flyAway 2s forwards;">🐦‍⬛✉️</div>
+                    <h2 style="color:#d4af37;">RAVEN DISPATCHED!</h2>
+                    <p style="color:#e0d8c3; margin-bottom:20px;">The Wizard has received your message.</p>
+                    <button onclick="showSection('contact')" class="submit-btn">GO BACK TO ARCANE COMMUNIQUÉ</button>
+                </div>
+            `;
+        } else {
+            throw new Error("Could not send");
+        }
+    } catch (error) {
         document.getElementById('contact-content').innerHTML = `
-            <div style="text-align:center; padding-top:50px;">
-                <div style="font-size:50px; animation: flyAway 2s forwards;">🐦‍⬛✉️</div>
-                <h2 style="color:#d4af37;">RAVEN DISPATCHED!</h2>
-            </div>
+            <h2 style="color:red;">THE RAVEN GOT LOST IN A STORM.</h2>
+            <button onclick="location.reload()" class="submit-btn">TRY AGAIN</button>
         `;
     }
+}
+    // Generate falling leaves
+    function createLeaves() {
+        for (let i = 0; i < 20; i++) {
+            const leaf = document.createElement('div');
+            leaf.className = 'leaf';
+            leaf.style.left = Math.random() * 100 + 'vw';
+            leaf.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            leaf.style.animationDelay = Math.random() * 5 + 's';
+            document.body.appendChild(leaf);
+        }
+    }
+    createLeaves();
+    function toggleMute() {
+    const audio = document.getElementById('bg-music');
+    const btn = document.getElementById('mute-btn');
+    
+    if (audio.muted) {
+        audio.muted = false;
+        btn.innerHTML = '🔊';
+    } else {
+        audio.muted = true;
+        btn.innerHTML = '🔇';
+    }
+}
 
-    showSection('profile');
+    // Do NOT call showSection('profile') here anymore.
+    // It will be called by enterForest() instead.
 </script>
-    <div class="music-player">
-    <p>🎵 Playing: Forest Theme</p>
-    <audio controls loop style="height: 30px;">
-        <source src="fbgmusic.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-</div>
 </body>
 </html>

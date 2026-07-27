@@ -9,7 +9,7 @@
         body {
             margin: 0; height: 100vh;
             /* Keep the original background for the journal layer */
-            background: url('pics/forestbg.jfif') no-repeat center center fixed;
+            background: url('forestbg.jfif') no-repeat center center fixed;
             background-size: cover;
             font-family: 'Cinzel', serif;
             display: flex; justify-content: center; align-items: center;
@@ -143,23 +143,32 @@
 @keyframes fall {
     0% { transform: translateY(0) rotate(0deg); }
     100% { transform: translateY(105vh) rotate(360deg); } /* Fall to 105% of screen height */
-}
-#mute-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: rgba(30, 25, 20, 0.8);
-    border: 2px solid #d4af37;
-    color: #d4af37;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    z-index: 3000;
-    border-radius: 5px;
-    transition: all 0.3s;
-}
+    }
+    #mute-btn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(30, 25, 20, 0.8);
+        border: 2px solid #d4af37;
+        color: #d4af37;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        z-index: 3000;
+        border-radius: 5px;
+        transition: all 0.3s;
+    }
 
 #mute-btn:hover { background: #d4af37; color: #2d2319; }
+@keyframes magicalSwirl {
+    0% { transform: scale(1) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 0px #d4af37); }
+    50% { transform: scale(0) rotate(720deg); opacity: 0.2; filter: drop-shadow(0 0 20px #d4af37); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 0px #d4af37); }
+}
+
+.swirling {
+    animation: magicalSwirl 0.6s ease-in-out;
+}
     </style>
 </head>
 <body>
@@ -399,20 +408,27 @@ function openAlbum(category) {
 }
 function greetWizard() { alert("🦉: The Wizard is currently brewing coffee. Try back later!"); }
 let wizardState = 0;
+
 function changeWizard() {
     const img = document.getElementById('wizard-img');
-    wizardState = (wizardState + 1) % 2; // Toggles between 0 and 1
     
-    // Change to your secondary image filename here
-    img.src = wizardState === 0 ? 'pics/mc.png' : 'pics/Me.png'; 
-    
-    // Optional: Add a small "sparkle" effect when changing
-    img.style.filter = 'drop-shadow(0 0 10px #d4af37)';
-    setTimeout(() => img.style.filter = 'none', 300);
-}
+    // If it's already swirling, don't spam-click
+    if (img.classList.contains('swirling')) return;
 
-    // Do NOT call showSection('profile') here anymore.
-    // It will be called by enterForest() instead.
+    // Trigger the CSS swirl animation
+    img.classList.add('swirling');
+
+    // Exactly halfway through the animation (0.3s), swap the image source
+    setTimeout(() => {
+        wizardState = (wizardState + 1) % 2;
+        img.src = wizardState === 0 ? 'pics/mc.png' : 'pics/Me.png';
+    }, 300);
+
+    // Remove the class after the animation ends (0.6s total) so it can be clicked again
+    setTimeout(() => {
+        img.classList.remove('swirling');
+    }, 600);
+}
 </script>
 </body>
 </html>
